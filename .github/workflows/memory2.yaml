@@ -13,7 +13,6 @@ jobs:
       - name: Test Code
         run: npm run test
   build:
-    needs: test
     runs-on: ubuntu-latest
     outputs:
       my-variable: ${{ steps.publish.outputs.my-variable }}
