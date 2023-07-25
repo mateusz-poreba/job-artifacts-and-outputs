@@ -1,0 +1,45 @@
+name: Deploy Website 4
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint code
+        run: npm run lint
+      - name: Test code
+        run: npm run test
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      js-filename: ${{ steps.publish-js-filename.outputs.js-filename }}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      # - name: Install dependencies
+      #   run: npm ci
+      - name: Build website
+        run: npm run build
+      - name: Publish JS Filename
+        id: publish-js-filename
+        run: find dist/assets/*.js -type f -execdir echo 'js-filename={}' >> $GITHUB_OUTPUT ';'
+      - name: Upload dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-folder
+          path: dist
+  deploy:
+    needs:
+      - build
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get build artifact
+        uses: actions/download-artifact@v3
+      - name: Output contents
+        run: ls
+      - name: Output filename
+        run: echo '${{ needs.build.outputs.js-filename }}'
