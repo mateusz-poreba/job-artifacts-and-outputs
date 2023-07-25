@@ -41,7 +41,7 @@ jobs:
 
       - name: Publish JS Filename
         id: publish
-        run: find dist/asserts/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
 
   deploy:
     needs: build
