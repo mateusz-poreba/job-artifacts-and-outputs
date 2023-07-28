@@ -16,7 +16,7 @@ jobs:
       - name: Lint code
         run: npm run lint
       - name: Test code
-        run: npm test code
+        run: npm run test
   build:
     needs: test
     outputs:
